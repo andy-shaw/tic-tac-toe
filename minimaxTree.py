@@ -5,12 +5,14 @@ Date:   12/15/2013
 This is a minimax tree that will have a board at each node.
 '''
 
+from board import Board
+
 class MinimaxTree():
     '''Minimax tree with tic-tac-toe board at each node'''
     
     class Node():
         '''Node to hold board, score, and parent'''
-
+        
         def __init__(self, board, player):
             self.board = board
             
@@ -23,10 +25,10 @@ class MinimaxTree():
                 self.score = -100
                 
             self.parent = None
-            self.children = None
+            self.children = []
             
     def __init__(self, root, player):
-        self.root = Node(root, player)
+        self.root = self.Node(root, player)
         self.expand(self.root, player)
         
     def expand(self, node, maxPlayer):
@@ -36,20 +38,23 @@ class MinimaxTree():
         if maxPlayer == 'X': minplayer = 'O'
         elif maxPlayer == 'O': minPlayer = 'X'
         
-        node.children = successor(node.board, maxPlayer)
+        successors = self.successor(node.board, maxPlayer)
+        for board in successors:
+            node.children.append(Node(board, minPlayer))
         
         #recursively expand each node, terminating if board is full or 
-        for each in node.children:
-            if not each.board.isFull() and not each.board.hasWinner():
-                self.expand(each, minPlayer)
-            else: 
+        print len(node.children)
+        if len(node.children) > 0:
+            for each in node.children:
+                print each.board.toString() + '\n\n'
+                if not each.board.isFull() and not each.board.hasWinner():
+                    self.expand(each, minPlayer)
                 
-        
 #-----------------------------------------------------------------------------------------------
-'''
-Local methods
-'''
-    def successor(board, move):
+    '''
+    Local methods
+    '''
+    def successor(self, board, move):
         '''returns set of possible board configurations for placing the element passed by move'''
         
         set = []
@@ -58,6 +63,14 @@ Local methods
             for column in range(3):
                 if board.getBlock(row, column) == ' ':
                     newBoard = Board()
-                    copyBoard(board, newBoard)
+                    self.copyBoard(board, newBoard)
                     set.append(newBoard.setBlock(row,column,move))
         return set
+        
+#-----------------------------------------------------------------------------------------------
+
+    def copyBoard(self, board1, board2):
+        '''copy the contents of board1 to board2. Note: does not return anything'''
+        for row in range(3):
+            for column in range(3):
+                board2.setBlock(row, column, board1.getBlock(row,column))

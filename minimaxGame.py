@@ -22,17 +22,3 @@ if __name__ == '__main__':
         exit()
         
     game(difficulty)
-
-#----------------------------------------------------------------------------------------------
-    
-#----------------------------------------------------------------------------------------------
-
-def 
-
-#----------------------------------------------------------------------------------------------
-                
-def copyBoard(board1, board2):
-    '''copy the contents of board1 to board2. Note: does not return anything'''
-    for row in range(3):
-        for column in range(3):
-            board2.setBlock(row, column, board1.getBlock(row,column))
