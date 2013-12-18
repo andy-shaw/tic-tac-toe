@@ -57,9 +57,16 @@ class Board:
         for row in range(3):
             list = []
             for column in range(3):
-                list.append(str(self.board[row][column]))
+                list.append(self.board[row][column])
             s += '|'.join(list) + '\n-----\n'
         return s[:-7] #remove last \n-----\n
+        
+    def toList(self):
+        '''represent board as a list'''
+        l = []
+        for row in range(3):
+            for column in range(3):
+                l.append(self.board[row][column])
         
     def isFull(self):
         '''return true if board has no empty spaces'''

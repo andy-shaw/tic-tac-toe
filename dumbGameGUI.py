@@ -7,6 +7,72 @@ The game will output to the console each turn.
 The game agent will select a random, empty square and place its move there.
 '''
 
+
+from Tkinter import *
+import tkMessageBox
+from board import Board
+
+class Game:
+    def __init__(self, master):
+        #Give introduction to game
+        self.intro()
+        
+        #set up the board
+        frame = Frame(master)
+        frame.grid()
+        
+        #read in images for X, O, and blank
+        X = PhotoImage(file='X.gif')
+        O = PhotoImage(file='O.gif')
+        blank = PhotoImage(file='blank.gif')
+        
+        #set up borders and empty places
+        Label(master,
+            text=' ', 
+            fg="black", 
+            bg="black").grid(
+            column=3, 
+            rowspan=11)
+            
+        Label(master,
+            text=' ',
+            fg="black"
+            bg='black').grid(
+            column=7,
+            rowspan=11)
+            
+        Label(master,
+            text=' ',
+            fg="black"
+            bg='black').grid(
+            row=3,
+            column=11)
+            
+        #initialize to all blanks
+        self.board = [
+        #row1
+        [Button(master, image=X), Button(master, image=blank), Button(master, image=blank)],
+        #row2
+        [Button(master, image=blank), Button(master, image=blank), Button(master, image=blank)],
+        #row3
+        [Button(master, image=blank), Button(master, image=blank), Button(master, image=blank)]]
+        
+        #create reference for each widget
+        for row in range(3):
+            for column in range(3):
+                self.board[row][column].image = X
+        
+        for row in range(3):
+            self.board[row][0].grid(row=row*3, column=0, rowspan=3, columnspan=3)
+            self.board[row][1].grid(row=row*3+1, column=5, rowspan=3, columnspan=3)
+            self.board[row][2].grid(row=row*3+2, column=9, rowspan=3, columnspan=3)
+        
+    def intro(self):
+        welcome =  ''
+        welcome +=  'Welcome to tic-tac-toe!'
+        
+        tkMessageBox.showinfo('Welcome', welcome)
+
 def game():
     from board import Board
     from string import lower
@@ -14,14 +80,6 @@ def game():
     
     #make a new, empty board
     b = Board()
-    
-    #show player empty board
-    welcome =  '\n\n'
-    welcome +=  'Welcome to tic-tac-toe.\nHere is the board, when placing your move,\n'
-    welcome += 'be sure to use the format column,row when specifying where to place your X.\n'
-    welcome +=  'i.e. the top left square is 1,1 and the bottom right square is 3,3\n'
-    welcome += 'You can type Quit to forfeit at any time.\n\n\n'
-    print welcome
     
     print b.toString()
     
@@ -102,8 +160,13 @@ def game():
         
     
 if __name__ == '__main__':
-    keepPlaying = True
-    while keepPlaying:
-        keepPlaying = game()
-    print 'Thank you for playing!'
+
+    root = Tk()
+    game = Game(root)
+    root.mainloop()
+    
+    # keepPlaying = True
+    # while keepPlaying:
+        # keepPlaying = game()
+    # print 'Thank you for playing!'
     
