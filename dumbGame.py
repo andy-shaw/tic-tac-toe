@@ -10,6 +10,7 @@ The game agent will select a random, empty square and place its move there.
 def game():
     from board import Board
     from string import lower
+    import agent
     import random
     
     #make a new, empty board
@@ -28,14 +29,14 @@ def game():
     while not b.hasWinner() and not b.isFull():
         #player goes first (is X)
         player = raw_input('\n\nWhat column and row do you want to put X in?\n(Use column,row format)\n')
-        
-        #make sure player entered something
-        if len(player) == 0:
-            print 'Please enter your column,row to place the X, or type quit to forfeit.'
-            continue
             
         #see if the player quits
-        if lower(player) == "quit": print 'You lost the game.  Thank you for playing!'; exit()
+        if lower(player) == "quit" or lower(player[0]) == 'q': print 'You lost the game.  Thank you for playing!'; exit()
+        
+        #make sure player entered something
+        if len(player) < 3:
+            print 'Please enter your column,row to place the X, or type quit to forfeit.'
+            continue
         
         #make sure the player input is formatted correctly
         if not len(player) == 3 and player[1] == ',':
@@ -71,11 +72,7 @@ def game():
         print '\nNow the computer will place an O.'
         
         #find random empty square for computer's turn
-        column = random.randint(0,2)
-        row = random.randint(0,2)
-        while not b.getBlock(row,column) == ' ':
-            column = random.randint(0,2)
-            row = random.randint(0,2)
+        row,column = agent.dumb(b)
             
         b.setBlock(row, column, 'O')
         

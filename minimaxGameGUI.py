@@ -93,30 +93,27 @@ class Game:
         if self.updatePlayer(row,column)== -1: 
             self.updateAlert("Block already contains an X or O, please choose another box.")
             return
+        self.updateGif()
             
         #check for a winner or a full board
         if self.board.hasWinner(): self.endGame(); return
         if self.board.isFull(): self.endGame(); return
         
         self.updateOpponent()
+        self.updateGif()
         
         #check for a winner or a full board
         if self.board.hasWinner(): self.endGame(); return
         if self.board.isFull(): self.endGame(); return
         
     def updateOpponent(self):
-        row, column = agent.dumb(self.board)
+        row, column = agent.difficult(self.board, 'H')
         self.board.setBlock(row, column, 'O')
-        
-        self.updateGif()
         
     def updatePlayer(self, row, column):
         #check if block is already occupied
         if self.board.getBlock(row, column) is not ' ': return -1
-        
         self.board.setBlock(row, column, 'X')
-        
-        self.updateGif()
         return 1
         
     def updateGif(self):
