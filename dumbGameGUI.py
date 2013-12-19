@@ -17,61 +17,51 @@ class Game:
         #Give introduction to game
         self.intro()
         
-        #set up the board
-        frame = Frame(master)
-        frame.grid()
-        
         #read in images for X, O, and blank
         X = PhotoImage(file='X.gif')
         O = PhotoImage(file='O.gif')
         blank = PhotoImage(file='blank.gif')
-        
-        #set up borders and empty places
-        Label(master,
-            text=' ', 
-            fg="black", 
-            bg="black").grid(
-            column=3, 
-            rowspan=11)
-            
-        Label(master,
-            text=' ',
-            fg="black"
-            bg='black').grid(
-            column=7,
-            rowspan=11)
-            
-        Label(master,
-            text=' ',
-            fg="black"
-            bg='black').grid(
-            row=3,
-            column=11)
-            
+
         #initialize to all blanks
-        self.board = [
+        #couldn't think of a better way to do the indexing for the updateBoard command
+        self.gifBoard = [
         #row1
-        [Button(master, image=X), Button(master, image=blank), Button(master, image=blank)],
+        [Button(master, image=X, command=self.updateBoard(0,0)), 
+        Button(master, image=X, command=self.updateBoard(0,1)), 
+        Button(master, image=X, command=self.updateBoard(0,2))],
         #row2
-        [Button(master, image=blank), Button(master, image=blank), Button(master, image=blank)],
+        [Button(master, image=X, command=self.updateBoard(1,0)), 
+        Button(master, image=X, command=self.updateBoard(1,1)), 
+        Button(master, image=X, command=self.updateBoard(1,2))],
         #row3
-        [Button(master, image=blank), Button(master, image=blank), Button(master, image=blank)]]
+        [Button(master, image=X, command=self.updateBoard(2,0)), 
+        Button(master, image=X, command=self.updateBoard(2,1)), 
+        Button(master, image=X, command=self.updateBoard(2,2))],
+        ]
         
         #create reference for each widget
         for row in range(3):
             for column in range(3):
-                self.board[row][column].image = X
+                self.gifBoard[row][column].image = X
         
         for row in range(3):
-            self.board[row][0].grid(row=row*3, column=0, rowspan=3, columnspan=3)
-            self.board[row][1].grid(row=row*3+1, column=5, rowspan=3, columnspan=3)
-            self.board[row][2].grid(row=row*3+2, column=9, rowspan=3, columnspan=3)
+            self.gifBoard[row][0].grid(row=row*3, column=0, rowspan=3, columnspan=3, sticky=W+N+E+S)
+            self.gifBoard[row][1].grid(row=row*3+1, column=5, rowspan=3, columnspan=3, sticky=W+N+E+S)
+            self.gifBoard[row][2].grid(row=row*3+2, column=9, rowspan=3, columnspan=3, sticky=W+N+E+S)
+            
+        alert = StringVar()
+        alert.set('')
+        alertText = Message(master, textvariable=alert, padx=3, pady=3,width=100).grid(
+            row=11, columnspan=11)
         
     def intro(self):
         welcome =  ''
         welcome +=  'Welcome to tic-tac-toe!'
         
         tkMessageBox.showinfo('Welcome', welcome)
+        
+    def updateBoard(self, row, column):
+        pass
 
 def game():
     from board import Board
