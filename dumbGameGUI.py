@@ -49,10 +49,12 @@ class Game:
             self.gifBoard[row][1].grid(row=row*3+1, column=5, rowspan=3, columnspan=3, sticky=W+N+E+S)
             self.gifBoard[row][2].grid(row=row*3+2, column=9, rowspan=3, columnspan=3, sticky=W+N+E+S)
             
-        alert = StringVar()
-        alert.set('')
-        alertText = Message(master, textvariable=alert, padx=3, pady=3,width=100).grid(
+        self.alert = StringVar()
+        self.alert.set('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        self.alertText = Message(master, textvariable=self.alert, padx=3, pady=3,width=100).grid(
             row=11, columnspan=11)
+            
+        Button(master, text='help', command=self.updateAlert).grid(row=12)
         
     def intro(self):
         welcome =  ''
@@ -60,7 +62,12 @@ class Game:
         
         tkMessageBox.showinfo('Welcome', welcome)
         
+    def updateAlert(self):
+        self.alert.set('hello')
+        
     def updateBoard(self, row, column):
+        # self.updatePlayer(row,column)
+        # self.updateOpponent()
         pass
 
 def game():
