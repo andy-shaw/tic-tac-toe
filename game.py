@@ -1,21 +1,16 @@
 '''
 Author: Andy Shaw
-Date:   12/13/2013
+Date:   12/20/2013
 
-This is a dumb game.  
-The GUI interacts with the user, and the user presses buttons to start events.
-The board will update itself, and then place the computer's move.
+This module has the game GUI and the text based game classes. Both rely on the Board class
 '''
 
-import sys
-from Tkinter import *
-import tkMessageBox
 from board import Board
+from Tkinter import *
 import agent
 
-#TODO - modify Game class in game.py to accept parametrized agent specifications
+class GameGUI:
 
-class Game:
     def __init__(self, master, intro, debug):
         self.debug = debug
     
@@ -77,6 +72,7 @@ class Game:
         if self.debug: print 'alert box created and bound to frame'
         
     def intro(self):
+        import tkMessageBox
         welcome =  ''
         welcome +=  '''Welcome to tic-tac-toe! This game has no intelligence behind 
 your opponent.  The computer will select a random square to 
@@ -94,27 +90,30 @@ place its O.  You have to try to lose.'''
         if self.updatePlayer(row,column)== -1: 
             self.updateAlert("Block already contains an X or O, please choose another box.")
             return
-        self.updateGif()
             
         #check for a winner or a full board
         if self.board.hasWinner(): self.endGame(); return
         if self.board.isFull(): self.endGame(); return
         
         self.updateOpponent()
-        self.updateGif()
         
         #check for a winner or a full board
         if self.board.hasWinner(): self.endGame(); return
         if self.board.isFull(): self.endGame(); return
         
     def updateOpponent(self):
-        row, column = agent.difficult(self.board, 'H')
+        row, column = agent.dumb(self.board)
         self.board.setBlock(row, column, 'O')
+        
+        self.updateGif()
         
     def updatePlayer(self, row, column):
         #check if block is already occupied
         if self.board.getBlock(row, column) is not ' ': return -1
+        
         self.board.setBlock(row, column, 'X')
+        
+        self.updateGif()
         return 1
         
     def updateGif(self):
@@ -138,6 +137,8 @@ place its O.  You have to try to lose.'''
                     
     def endGame(self):
         '''ask user if they wish to play again'''
+        import tkMessageBox
+        
         winner = ''
         again = '\nWould you like to play again?'
         if self.board.hasWinner() is 'X':
@@ -153,22 +154,3 @@ place its O.  You have to try to lose.'''
             self.playAgain = True
             
         self.master.destroy()
-        
-    
-if __name__ == '__main__':
-    debug = False
-    try: 
-        if sys.argv[1] == 'DEBUG': debug = True
-    except: pass
-
-    playAgain = True
-    intro = True
-    
-    while playAgain:
-        root = Tk()
-        game = Game(root, intro, debug)
-        root.mainloop()
-        playAgain = game.playAgain
-        intro = False
-        root = None
-    
