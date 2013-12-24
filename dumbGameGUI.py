@@ -24,7 +24,7 @@ if __name__ == '__main__':
     
     while playAgain:
         root = Tk()
-        game = GameGUI(root, intro, debug)
+        game = GameGUI(root, intro, debug, 'dumb')
         root.mainloop()
         playAgain = game.playAgain
         intro = False

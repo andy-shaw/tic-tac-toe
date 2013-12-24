@@ -11,8 +11,10 @@ import agent
 
 class GameGUI:
 
-    def __init__(self, master, intro, debug):
+    def __init__(self, master, intro, debug, gameType):
         self.debug = debug
+        self.gameType = gameType
+        self.difficulty = None
     
         #Give introduction to game
         if intro: self.intro()
@@ -73,12 +75,40 @@ class GameGUI:
         
     def intro(self):
         import tkMessageBox
-        welcome =  ''
-        welcome +=  '''Welcome to tic-tac-toe! This game has no intelligence behind 
+        dumbWelcome =  '''Welcome to tic-tac-toe! This game has no intelligence behind 
 your opponent.  The computer will select a random square to 
 place its O.  You have to try to lose.'''
+
+        minimaxWelcome = '''Welcome to tic-tac-toe! This game has 3 levels of difficulty.
+Easy, Medium, and Hard.  Easy can plan ahead 1 move, Medium plans 
+ahead 2 moves, and Hard can plan ahead to the end of the game.  
+Please select a difficulty.'''
         
-        tkMessageBox.showinfo('Welcome', welcome)
+        if self.gameType is 'dumb': 
+            tkMessageBox.showinfo('Welcome', dumbWelcome)
+        if self.gameType is 'minimax': 
+            tkMessageBox.showinfo('Welcome', minimaxWelcome)
+        
+            #open new frame to get difficulty
+            root = Toplevel()
+            root.title('Difficulty')
+            difficulty = StringVar()
+            Radiobutton(root, text='Easy', indicatoron=0, variable=difficulty, value='E', width=10).grid(row=0)
+            Radiobutton(root, text='Medium', indicatoron=0, variable=difficulty, value='M', width=10).grid(row=1)
+            Radiobutton(root, text='Hard', indicatoron=0, variable=difficulty, value='H', width=10).grid(row=2)
+
+            #empty label for spacing
+            Label(root, text='').grid(row=3)
+
+            Button(root, text='Okay', command=root.destroy).grid(row=4)
+            
+            root.mainloop()
+            
+            if len(difficulty.get()) is not 0: self.difficulty = difficulty.get()
+            else: 
+                #notify player that they did not set the difficulty, so they are facing an easy opponent
+                tkMessageBox.showinfo('Difficulty', 'You did not select a difficulty, so you will be on Easy.')
+                self.difficulty = 'E'
         
     def updateAlert(self, text):
         self.alert.set(text)
@@ -102,7 +132,8 @@ place its O.  You have to try to lose.'''
         if self.board.isFull(): self.endGame(); return
         
     def updateOpponent(self):
-        row, column = agent.dumb(self.board)
+        if self.gameType is 'dumb': row, column = agent.dumb(self.board)
+        if self.gameType is 'minimax': row, column = agent.difficult(self.board, self.difficulty)
         self.board.setBlock(row, column, 'O')
         
         self.updateGif()

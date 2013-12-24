@@ -1,54 +1,17 @@
 from Tkinter import *
 
-class App:
+root = Toplevel()
+root.title('Difficulty')
+difficulty = StringVar()
+Radiobutton(root, text='Easy', indicatoron=0, variable=difficulty, value='E', width=10).grid(row=0)
+Radiobutton(root, text='Medium', indicatoron=0, variable=difficulty, value='M', width=10).grid(row=1)
+Radiobutton(root, text='Hard', indicatoron=0, variable=difficulty, value='H', width=10).grid(row=2)
 
-    def __init__(self, master):
+#empty label for spacing
+Label(root, text='').grid(row=3)
 
-        frame = Frame(master)
-        frame.grid()
+Button(root, text='Okay', command=root.destroy).grid(row=4)
 
-        self.button = Button(frame, text="QUIT", fg="red", command=frame.quit)
-        self.button.grid(row=0)
+root.mainloop()
 
-        self.hi_there = Button(frame, text="Hello", command=self.say_hi)
-        self.hi_there.grid(row=1)
-
-    def say_hi(self):
-        print "hi there, everyone!"
-
-# root = Tk()
-
-# app = App(root)
-
-# root.mainloop()
-# root.destroy()
-
-
-class MyDialog:
-
-    def __init__(self, parent):
-
-        top = self.top = Toplevel(parent)
-
-        Label(top, text="Value").pack()
-
-        self.e = Entry(top)
-        self.e.pack(padx=5)
-
-        b = Button(top, text="OK", command=self.ok)
-        b.pack(pady=5)
-
-    def ok(self):
-
-        print "value is", self.e.get()
-
-        self.top.destroy()
-
-
-root = Tk()
-Button(root, text="Hello!").pack()
-root.update()
-
-d = MyDialog(root)
-
-root.wait_window(d.top)
+print difficulty.get()
