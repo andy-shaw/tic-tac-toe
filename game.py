@@ -5,6 +5,8 @@ Date:   12/20/2013
 This module has the game GUI and the text based game classes. Both rely on the Board class
 '''
 
+#TODO - player update is able to be overwritten by computer opponent.
+
 from board import Board
 from Tkinter import *
 import agent
@@ -15,17 +17,15 @@ class GameGUI:
         self.debug = debug
         self.gameType = gameType
         self.difficulty = None
-    
-        #Give introduction to game
-        if intro: self.intro()
-        
-        if self.debug: print 'intro complete'
-        
         self.playAgain = False
         self.master = master
         self.board = Board()
-        
         if self.debug: print 'board initialized'
+    
+        #Give introduction to game
+        #request difficulty again if in minimax mode
+        if intro or gameType is 'minimax': self.intro()
+        if self.debug: print 'intro complete'
         
         #read in images for X, O, and blank
         X = PhotoImage(file='X.gif')
@@ -80,9 +80,9 @@ your opponent.  The computer will select a random square to
 place its O.  You have to try to lose.'''
 
         minimaxWelcome = '''Welcome to tic-tac-toe! This game has 3 levels of difficulty.
-Easy, Medium, and Hard.  Easy can plan ahead 1 move, Medium plans 
-ahead 2 moves, and Hard can plan ahead to the end of the game.  
-Please select a difficulty.'''
+Easy, Medium, and Hard.  Easy can plan ahead 1 move, Medium can 
+plan ahead 2 moves, and Hard can plan ahead to the end of the 
+game.  Please select a difficulty.'''
         
         if self.gameType is 'dumb': 
             tkMessageBox.showinfo('Welcome', dumbWelcome)
@@ -90,25 +90,27 @@ Please select a difficulty.'''
             tkMessageBox.showinfo('Welcome', minimaxWelcome)
         
             #open new frame to get difficulty
-            root = Toplevel()
-            root.title('Difficulty')
+            # root = Toplevel(master=self.master)
+            # root.title('Difficulty')
             difficulty = StringVar()
-            Radiobutton(root, text='Easy', indicatoron=0, variable=difficulty, value='E', width=10).grid(row=0)
-            Radiobutton(root, text='Medium', indicatoron=0, variable=difficulty, value='M', width=10).grid(row=1)
-            Radiobutton(root, text='Hard', indicatoron=0, variable=difficulty, value='H', width=10).grid(row=2)
-
-            #empty label for spacing
-            Label(root, text='').grid(row=3)
-
-            Button(root, text='Okay', command=root.destroy).grid(row=4)
+            # Radiobutton(root, text='Easy', indicatoron=0, variable=difficulty, value='E', width=10, command=lambda x=root: self.close(x)).grid(row=0)
+            # Radiobutton(root, text='Medium', indicatoron=0, variable=difficulty, value='M', width=10,command=lambda x=root: self.close(x)).grid(row=1)
+            # Radiobutton(root, text='Hard', indicatoron=0, variable=difficulty, value='H', width=10, command=lambda x=root: self.close(x)).grid(row=2)
             
-            root.mainloop()
+            # root.mainloop()
+            
+            difficulty.set('E')
+            if self.debug: print 'difficulty is', difficulty.get()
             
             if len(difficulty.get()) is not 0: self.difficulty = difficulty.get()
             else: 
                 #notify player that they did not set the difficulty, so they are facing an easy opponent
                 tkMessageBox.showinfo('Difficulty', 'You did not select a difficulty, so you will be on Easy.')
                 self.difficulty = 'E'
+                
+    def close(self, tk):
+        tk.withdraw()
+        self.master.quit()
         
     def updateAlert(self, text):
         self.alert.set(text)
@@ -117,7 +119,7 @@ Please select a difficulty.'''
     
         self.updateAlert('')
         if self.debug: print 'update ' + str(row) + ' ' + str(column)
-        if self.updatePlayer(row,column)== -1: 
+        if self.updatePlayer(row,column) == -1: 
             self.updateAlert("Block already contains an X or O, please choose another box.")
             return
             
@@ -134,6 +136,9 @@ Please select a difficulty.'''
     def updateOpponent(self):
         if self.gameType is 'dumb': row, column = agent.dumb(self.board)
         if self.gameType is 'minimax': row, column = agent.difficult(self.board, self.difficulty)
+        
+        if self.debug: print 'updated opponent at', row, column
+        
         self.board.setBlock(row, column, 'O')
         
         self.updateGif()
@@ -141,6 +146,8 @@ Please select a difficulty.'''
     def updatePlayer(self, row, column):
         #check if block is already occupied
         if self.board.getBlock(row, column) is not ' ': return -1
+        
+        if self.debug: print 'updated player at', row, column
         
         self.board.setBlock(row, column, 'X')
         

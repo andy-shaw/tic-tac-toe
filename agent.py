@@ -22,14 +22,9 @@ def dumb(board):
     return row, column
     
 def difficult(board, difficulty, computer='O'):
-    if difficulty is 'E':
-        movesAhead = 1
-    elif difficulty is 'M':
-        movesAhead = 2
-    elif difficulty is 'H':
-        movesAhead = 10
-
-    nextBoard = minimax(board, movesAhead, True, computer)[1]
+    movesAhead = {'E': 1, 'M': 2, 'H': 10}
+        
+    nextBoard = minimax(board, movesAhead[difficulty], True, computer)[1]
     
     #find the row,column changed from the previous board to now
     for row in range(3):
@@ -114,6 +109,7 @@ def successor(board, move):
                 copyBoard(board, newBoard)
                 newBoard.setBlock(row, column, move)
                 set.append(newBoard)
+    print len(set)
     return set
     
 #-----------------------------------------------------------------------------------------------
