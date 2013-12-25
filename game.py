@@ -19,6 +19,7 @@ class GameGUI:
         self.difficulty = None
         self.playAgain = False
         self.master = master
+        self.master.title('Tic-Tac-Toe')
         self.board = Board()
         if self.debug: print 'board initialized'
     
@@ -90,16 +91,15 @@ game.  Please select a difficulty.'''
             tkMessageBox.showinfo('Welcome', minimaxWelcome)
         
             #open new frame to get difficulty
-            # root = Toplevel(master=self.master)
-            # root.title('Difficulty')
+            root = Toplevel(master=self.master)
+            root.title('Difficulty')
             difficulty = StringVar()
-            # Radiobutton(root, text='Easy', indicatoron=0, variable=difficulty, value='E', width=10, command=lambda x=root: self.close(x)).grid(row=0)
-            # Radiobutton(root, text='Medium', indicatoron=0, variable=difficulty, value='M', width=10,command=lambda x=root: self.close(x)).grid(row=1)
-            # Radiobutton(root, text='Hard', indicatoron=0, variable=difficulty, value='H', width=10, command=lambda x=root: self.close(x)).grid(row=2)
+            Radiobutton(root, text='Easy', indicatoron=0, variable=difficulty, value='E', width=10, command=lambda x=root: self.close(x)).grid(row=0)
+            Radiobutton(root, text='Medium', indicatoron=0, variable=difficulty, value='M', width=10,command=lambda x=root: self.close(x)).grid(row=1)
+            Radiobutton(root, text='Hard', indicatoron=0, variable=difficulty, value='H', width=10, command=lambda x=root: self.close(x)).grid(row=2)
             
-            # root.mainloop()
-            
-            difficulty.set('E')
+            root.mainloop()
+
             if self.debug: print 'difficulty is', difficulty.get()
             
             if len(difficulty.get()) is not 0: self.difficulty = difficulty.get()

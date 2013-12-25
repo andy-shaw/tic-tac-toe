@@ -22,7 +22,7 @@ def dumb(board):
     return row, column
     
 def difficult(board, difficulty, computer='O'):
-    movesAhead = {'E': 1, 'M': 2, 'H': 10}
+    movesAhead = {'E': 1, 'M': 3, 'H': 10}
         
     nextBoard = minimax(board, movesAhead[difficulty], True, computer)[1]
     
@@ -30,20 +30,23 @@ def difficult(board, difficulty, computer='O'):
     for row in range(3):
         for column in range(3):
             if board.getBlock(row, column) is not nextBoard.getBlock(row, column):
+                print '----------------Old Board'
+                print board.toString()
+                print '----------------new Board'
+                print nextBoard.toString()
                 return row, column
     
-    
-def minimax(board, depth, maxPlayer, computer='O'):
+def minimax(board, depth, maxPlayer, computer):
     '''naive encoding for minimax.  Algorithm from wikipedia article on minimax'''
     if depth == 0 or board.hasWinner() or board.isFull():
         return (score(board, computer), board)
-
+        
     if computer is 'O':
         if maxPlayer:
             #empty board is for a place holder
             bestValue = (-99999, Board())
             for child in successor(board, 'O'):
-                value = minimax(child, depth-1, False)
+                value = minimax(child, depth-1, False, computer)
                 bestValue = max(bestValue, value)
             return bestValue
                 
@@ -51,13 +54,14 @@ def minimax(board, depth, maxPlayer, computer='O'):
             #empty board is for place holder
             bestValue = (99999, Board())
             for child in successor(board, 'X'):
-                value = minimax(child, depth-1, True)
+                value = minimax(child, depth-1, True, computer)
                 bestValue = min(bestValue,value)
             return bestValue
             
     elif computer is 'X':
+        print 'should never be here simba'
         if maxPlayer:
-            #empty board is for a place holder
+            # empty board is for a place holder
             bestValue = (-99999, Board())
             for child in successor(board, 'X'):
                 value = minimax(child, depth-1, False, 'X')
@@ -65,7 +69,7 @@ def minimax(board, depth, maxPlayer, computer='O'):
             return bestValue
                 
         else:
-            #empty board is for place holder
+            # empty board is for place holder
             bestValue = (99999, Board())
             for child in successor(board, 'O'):
                 value = minimax(child, depth-1, True, 'X')
@@ -77,29 +81,28 @@ Local methods
 '''
     
 def score(board, computer):
+    '''rate provided board on if there's a winner, or if it's full'''
     if computer is 'O':
         if board.hasWinner() is 'X':
             return -100
         elif board.hasWinner() is 'O':
             return 100
-    elif computer is 'X':
+    if computer is 'X':
         if board.hasWinner() is 'X':
-            print 'win'
             return 100
         elif board.hasWinner() is 'O':
             return -100
             
     #tied game is preferable to losing
-    elif board.isFull():
+    if board.isFull():
         return 50
-    #board has no winner
-    else:
-        return -1
+    #board has no winner and is not full
+    return 0
 
 #-----------------------------------------------------------------------------------------------
         
 def successor(board, move):
-    '''returns set of possible board configurations for placing the element passed by move'''
+    '''returns set of possible board configurations for placing a single element'''
     
     set = []
     for row in range(3):
@@ -109,7 +112,6 @@ def successor(board, move):
                 copyBoard(board, newBoard)
                 newBoard.setBlock(row, column, move)
                 set.append(newBoard)
-    print len(set)
     return set
     
 #-----------------------------------------------------------------------------------------------
