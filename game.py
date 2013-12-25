@@ -21,6 +21,11 @@ class GameGUI:
         self.master = master
         self.master.title('Tic-Tac-Toe')
         self.board = Board()
+        
+        #player characters
+        self.player = 'X'
+        self.opponent = 'O'
+        
         if self.debug: print 'board initialized'
     
         #Give introduction to game
