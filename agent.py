@@ -40,23 +40,26 @@ def difficult(board, difficulty, computer='O'):
     root = Node(board)
     bestMove = minimax(root, movesAhead[difficulty], True, computer)
     
-    print bestMove
+    for child in root.children: print child.score, '\t',
+    print ''
     
     #get child configuration that matches bestMove
     nextBoard = None
     for child in root.children:
-        print child.score, '\t',
-        if child.score == bestMove:
+        #prioritize winning
+        if child.board.hasWinner() == computer:
             nextBoard = child.board
+    
+    #choose board that matches best move if win isn't possible
+    if not nextBoard:
+        for child in root.children:
+            if child.score == bestMove:
+                nextBoard = child.board
 
     #find the row,column changed from the previous board to now
     for row in range(3):
         for column in range(3):
             if board.getBlock(row, column) is not nextBoard.getBlock(row, column):
-                print '----------------Old Board'
-                print board.toString()
-                print '----------------new Board'
-                print nextBoard.toString()
                 return row, column
 
 def minimax(node, depth, maxPlayer, computer):
@@ -81,7 +84,7 @@ def minimax(node, depth, maxPlayer, computer):
             bestValue = 99999
             node.children = successor(node, 'X')
             for child in node.children:
-                value = minimax(child, depth-1, False, computer)
+                value = minimax(child, depth-1, True, computer)
                 bestValue = min(bestValue, value)
             node.score = bestValue
             return bestValue
@@ -102,7 +105,7 @@ def minimax(node, depth, maxPlayer, computer):
             bestValue = 99999
             node.children = successor(node, 'O')
             for child in node.children:
-                value = minimax(child, depth-1, False, computer)
+                value = minimax(child, depth-1, True, computer)
                 bestValue = min(bestValue, value)
             node.score = bestValue
             return bestValue
