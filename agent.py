@@ -35,7 +35,7 @@ def dumb(board):
     return row, column
 
 def difficult(board, difficulty, computer='O'):
-    movesAhead = {'E': 1, 'M': 3, 'H': 10}
+    movesAhead = {'E': 1, 'M': 2, 'H': 10}
 
     root = Node(board)
     bestMove = minimax(root, movesAhead[difficulty], True, computer)
