@@ -103,6 +103,8 @@ game.  Please select a difficulty.'''
             Radiobutton(root, text='Medium', indicatoron=0, variable=difficulty, value='M', width=10,command=lambda x=root: self.close(x)).grid(row=1)
             Radiobutton(root, text='Hard', indicatoron=0, variable=difficulty, value='H', width=10, command=lambda x=root: self.close(x)).grid(row=2)
             
+            root.protocol('WM_DELETE_WINDOW', lambda x=root: self.close(x))
+            
             root.mainloop()
 
             if self.debug: print 'difficulty is', difficulty.get()
