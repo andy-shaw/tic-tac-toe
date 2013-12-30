@@ -70,7 +70,7 @@ function minimax(node, depth, maximizingPlayer)
 minimax(origin, depth, TRUE)
 ```
 
-### Conversion for use in tic tac toe
+### Use in this tic tac toe program
 
 At each point of calculation, the root of the minimax tree will have resulted from the player (X) having just placed their piece.  The minimax calculation determines where the computer (O) should place their piece.
 
@@ -83,5 +83,8 @@ The scores for each board (if computer goes second) are as follows:
 * O wins: 100
 * Neither:  0
     
-Also, there is an implementation for the minimax tree to be computed from the standpoint that the computer is X and X is trying to win.
+The difficulty and ability to look ahead only a certain number of moves is achieved with the depth parameter in the minimax algorithm.  The number of iterations in the algorithm is two times the amount of moves to look ahead.  That allows for the inclusion of the player's retaliation move.  
 
+At most, the computer will have to calculate to a depth of nine because there are a maximum of nine possible moves on the board.
+
+Also, there is compatibility for the minimax tree to be computed from the standpoint that the computer is X and X is trying to win.
