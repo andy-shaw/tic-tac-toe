@@ -35,23 +35,17 @@ def dumb(board):
     return row, column
 
 def difficult(board, difficulty, computer='O'):
-    movesAhead = {'E': 1, 'M': 2, 'H': 10}
+    movesAhead = {'E': 2, 'M': 4, 'H': 10}
 
     root = Node(board)
     bestMove = minimax(root, movesAhead[difficulty], True, computer)
     
-    #get child configuration that matches bestMove
     nextBoard = None
-    for child in root.children:
-        #prioritize winning
-        if child.board.hasWinner() == computer:
-            nextBoard = child.board
     
-    #choose board that matches best move if win isn't possible
-    if not nextBoard:
-        for child in root.children:
-            if child.score == bestMove:
-                nextBoard = child.board
+    #choose board that matches best move 
+    for child in root.children:
+        if child.score == bestMove:
+            nextBoard = child.board
 
     #find the row,column changed from the previous board to now
     for row in range(3):
@@ -60,7 +54,7 @@ def difficult(board, difficulty, computer='O'):
                 return row, column
 
 def minimax(node, depth, maxPlayer, computer):
-    '''naive encoding for minimax.  Algorithm from wikipedia article on minimax'''
+    '''naive encoding for minimax with iterative deepening.  Algorithm from wikipedia article on minimax'''
     if depth == 0 or node.board.hasWinner() or node.board.isFull():
         node.score = score(node.board, computer)
         return node.score
