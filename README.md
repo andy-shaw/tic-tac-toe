@@ -78,10 +78,10 @@ The score or heuristic applied to terminal nodes depends on if there is a winner
 
 The scores for each board (if computer goes second) are as follows:
 
-* Tie     -  50
-* X wins  - -100
-* O wins  -  100
-* Neither -  0
+* Tie: 50
+* X wins: -100
+* O wins: 100
+* Neither:  0
     
 Also, there is an implementation for the minimax tree to be computed from the standpoint that the computer is X and X is trying to win.
 
