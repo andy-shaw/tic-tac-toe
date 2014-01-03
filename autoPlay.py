@@ -16,8 +16,10 @@ def autoPlay(player1, player2, error, silent):
     
     b = Board()
     
-    #start player1 in top left for quicker calculation of first move
-    b.setBlock(0, 0, 'X')
+    from random import randint
+    
+    #start player1 in a random spot for quicker calculation of first move
+    b.setBlock(randint(0,2), randint(0,2), 'X')
     if not silent: print b.toString(), '\n'
     
     while not b.hasWinner() and not b.isFull():
@@ -56,8 +58,8 @@ def autoPlay(player1, player2, error, silent):
 
     if not silent:
         if b.hasWinner() is 'X': print 'X won this round'
-        if b.hasWinner() is 'O': print 'O won this round'
-        if b.isFull(): print 'There was no winner this round'
+        elif b.hasWinner() is 'O': print 'O won this round'
+        elif b.isFull(): print 'There was no winner this round'
         
     return b.hasWinner()
         
@@ -86,7 +88,6 @@ if __name__ == '__main__':
         if tmp == 'SILENT': silent = True
         else: raise Exception
     except:
-        print 'bad'
         silent = False
         
     winner = autoPlay(player1, player2, errorRate, silent)
