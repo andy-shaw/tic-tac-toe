@@ -5,8 +5,6 @@ Date:   12/20/2013
 This module has the game GUI and the text based game classes. Both rely on the Board class
 '''
 
-#TODO - player update is able to be overwritten by computer opponent.
-
 from board import Board
 from Tkinter import *
 import agent

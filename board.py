@@ -67,6 +67,7 @@ class Board:
         for row in range(3):
             for column in range(3):
                 l.append(self.board[row][column])
+        return l
         
     def isFull(self):
         '''return true if board has no empty spaces'''
