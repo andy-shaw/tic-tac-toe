@@ -80,6 +80,23 @@ class Board:
                 if self.board[row][column] == ' ':
                     return False
         return True
+
+    def countX(self):
+        n = 0
+        for row in range(3):
+            for column in range(3):
+                if self.board[row][column] == 'X':
+                    n += 1
+        return n
+
+    def countO(self):
+        n = 0
+        for row in range(3):
+            for column in range(3):
+                if self.board[row][column] == 'O':
+                    n += 1
+        return n
+
     
     def hasWinner(self):
         '''check to see if there are 3 of any kind in a row, returns None if not'''

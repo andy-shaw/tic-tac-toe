@@ -22,7 +22,9 @@ for x in a:
 			base.append(list(x))
 			base.append(list(y))
 			base.append(list(z))
-			boardConfigurations.append(Board(base))
+			p = Board(base)
+			if abs(p.countX() - p.countO()) < 2:
+				boardConfigurations.append(p)
 
 print 'All possible board configurations are calculated'
 print 'n:\t\t', len(boardConfigurations)
@@ -32,7 +34,12 @@ numFull = 0
 numBoth = 0
 xwin = 0
 owin = 0
+i = 0
 for b in boardConfigurations:
+	if i % 1000 == 0:
+		print b.toString(), '\n'
+	i += 1
+
 	if b.hasWinner():
 		numWinners += 1
 		if b.hasWinner() == 'X':
