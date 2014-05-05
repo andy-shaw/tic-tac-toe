@@ -82,6 +82,9 @@ class Maker:
         self.outputButton = Button(self.master, text="Output Board", justify=CENTER, command=self.outputBoard)
         self.outputButton.grid(row=(4+self.offset)*self.scale, columnspan=3*self.scale)
 
+        self.close = Button(self.master, text="Exit", justify=CENTER, command=self.master.destroy)
+        self.close.grid(row=(5+self.offset)*self.scale, columnspan=3*self.scale)
+
         if self.debug: print 'buttons bound to grid'
 
     def setX(self):
@@ -152,6 +155,6 @@ class Maker:
 
 if __name__ == '__main__':
     root = Tk()
-    debug = True
+    debug = False
     maker = Maker(root, debug)
     root.mainloop()

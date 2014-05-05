@@ -11,6 +11,8 @@ class Board:
     def __init__(self, preset=None):
         '''set each place to provided 2-D array'''
         
+        self.possibleValues = ['X', 'O', ' ', '+']
+
         if preset == None:         
             self.board = [
             [' ',' ',' '],
@@ -26,7 +28,7 @@ class Board:
         #verify that the elements of the board are possibly entry values
         for row in self.board:
             for move in row:
-                if move in ['X', 'O', ' ']:
+                if move in self.possibleValues:
                     #correct format
                     pass
                 else:
@@ -45,7 +47,7 @@ class Board:
         '''set the block contents to the provided move'''
         
         #verify input
-        if move not in ['X', 'O', ' ']: raise Exception('invalid block assignment')
+        if move not in self.possibleValues: raise Exception('invalid block assignment')
         if not 0 <= row <= 2: raise Exception('row out of range in setBlock')
         if not 0 <= column <= 2: raise Exception('column out of range in setBlock')
         
@@ -63,11 +65,13 @@ class Board:
         
     def toList(self):
         '''represent board as a list'''
-        l = []
+        r = []
         for row in range(3):
+            c = []
             for column in range(3):
-                l.append(self.board[row][column])
-        return l
+                c.append(self.board[row][column])
+            r.append(c)
+        return r
         
     def isFull(self):
         '''return true if board has no empty spaces'''

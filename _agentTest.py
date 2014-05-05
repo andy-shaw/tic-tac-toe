@@ -11,6 +11,16 @@ nextpreset = [
 [' ',' ',' '],
 [' ',' ',' ']]
 
-b = Board(nextpreset)
+generated = [
+[' ', ' ', ' '], 
+[' ', ' ', 'X'], 
+[' ', 'O', 'X']]
 
-print agent.difficult(b, 'H', 'X')
+a = Board(preset=generated)
+print a.toString(), '\n\n'
+
+move = agent.difficult(a, 'H', 'O')
+
+a.setBlock(move[0], move[1], '+')
+
+print a.toString()

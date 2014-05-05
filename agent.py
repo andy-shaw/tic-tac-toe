@@ -39,11 +39,16 @@ def difficult(board, difficulty, computer='O'):
 
     root = Node(board)
     bestMove = minimax(root, movesAhead[difficulty], True, computer)
-    
+
+    print '\n\n', bestMove
+
     nextBoard = None
     
     #choose board that matches best move 
     for child in root.children:
+        # print 'child:\t\n', child.board.toString()
+        # print 'score:\t', child.score
+        # print '-----------'
         if child.score == bestMove:
             nextBoard = child.board
 
@@ -53,74 +58,57 @@ def difficult(board, difficulty, computer='O'):
             if board.getBlock(row, column) is not nextBoard.getBlock(row, column):
                 return row, column
 
-def minimax(node, depth, maxPlayer, computer):
+def minimax(node, depth, maxPlayer, player):
     '''naive encoding for minimax with iterative deepening.  Algorithm from wikipedia article on minimax'''
-    if depth == 0 or node.board.hasWinner() or node.board.isFull():
-        node.score = score(node.board, computer)
+    node.score = score(node.board, player)
+    if depth == 0 or node.score != 0:
+        if depth == 9:
+            print node.board.toString(), '\n'
         return node.score
 
-    if computer is 'O':
-        if maxPlayer:
-            #empty board is for a place holder
-            bestValue = -99999
-            node.children = successor(node, 'O')
-            for child in node.children:
-                value = minimax(child, depth-1, False, computer)
-                bestValue = max(bestValue, value)
-            node.score = bestValue
-            return bestValue
+    if player is 'O': opposite = 'X'
+    if player is 'X': opposite = 'O' 
 
-        else:
-            #empty board is for a place holder
-            bestValue = 99999
-            node.children = successor(node, 'X')
-            for child in node.children:
-                value = minimax(child, depth-1, True, computer)
-                bestValue = min(bestValue, value)
-            node.score = bestValue
-            return bestValue
+    if maxPlayer:
+        #empty board is for a place holder
+        bestValue = -99999
+        node.children = successor(node, player)
+        for child in node.children:
+            value = minimax(child, depth-1, False, player)
+            bestValue = max(bestValue, value)
+        node.score = bestValue
+        return bestValue
 
-    elif computer is 'X':
-        if maxPlayer:
-            #empty board is for a place holder
-            bestValue = -99999
-            node.children = successor(node, 'X')
-            for child in node.children:
-                value = minimax(child, depth-1, False, computer)
-                bestValue = max(bestValue, value)
-            node.score = bestValue
-            return bestValue
-
-        else:
-            #empty board is for a place holder
-            bestValue = 99999
-            node.children = successor(node, 'O')
-            for child in node.children:
-                value = minimax(child, depth-1, True, computer)
-                bestValue = min(bestValue, value)
-            node.score = bestValue
-            return bestValue
+    else:
+        #empty board is for a place holder
+        bestValue = 99999
+        node.children = successor(node, opposite)
+        for child in node.children:
+            value = minimax(child, depth-1, True, player)
+            bestValue = min(bestValue, value)
+        node.score = bestValue
+        return bestValue
 
 '''
 Local methods
 '''
 
-def score(board, computer):
+def score(board, player):
     '''rate provided board on if there's a winner, or if it's full'''
-    if computer is 'O':
-        if board.hasWinner() is 'X':
-            return -100
-        elif board.hasWinner() is 'O':
-            return 100
-    if computer is 'X':
-        if board.hasWinner() is 'X':
-            return 100
-        elif board.hasWinner() is 'O':
-            return -100
+
+    if player is 'O': opposite = 'X'
+    if player is 'X': opposite = 'O' 
+
+
+    if board.hasWinner() is player:
+        return 100
+    elif board.hasWinner() is opposite:
+        return -100
 
     #tied game is preferable to losing
     if board.isFull():
         return 50
+
     #board has no winner and is not full
     return 0
 
