@@ -19,17 +19,15 @@ class GameGUI:
         self.master = master
         self.master.title('Tic-Tac-Toe')
         self.board = Board()
+
+        #remember first configuration for stats
+        self.firstBoard = None
         
         #player characters
         self.player = 'X'
         self.opponent = 'O'
         
         if self.debug: print 'board initialized'
-    
-        #Give introduction to game
-        #request difficulty again if in minimax mode
-        if intro or gameType is 'minimax': self.intro()
-        if self.debug: print 'intro complete'
         
         #read in images for X, O, and blank
         X = PhotoImage(file='X.gif')
@@ -77,6 +75,11 @@ class GameGUI:
             
         if self.debug: print 'alert box created and bound to frame'
         
+        #Give introduction to game
+        #request difficulty again if in minimax mode
+        if intro or gameType is 'minimax': self.intro()
+        if self.debug: print 'intro complete'
+
     def intro(self):
         import tkMessageBox
         dumbWelcome =  '''Welcome to tic-tac-toe! This game has no intelligence behind 
@@ -112,6 +115,11 @@ game.  Please select a difficulty.'''
                 #notify player that they did not set the difficulty, so they are facing an easy opponent
                 tkMessageBox.showinfo('Difficulty', 'You did not select a difficulty, so you will be on Easy.')
                 self.difficulty = 'E'
+
+            if self.opponent == 'X':
+                row, column = agent.dumb(self.board)
+                self.board.setBlock(row, column, self.opponent)
+                self.updateGif()
                 
     def close(self, tk):
         tk.withdraw()
@@ -144,7 +152,7 @@ game.  Please select a difficulty.'''
         
         if self.debug: print 'updated opponent at', row, column
         
-        self.board.setBlock(row, column, 'O')
+        self.board.setBlock(row, column, self.opponent)
         
         self.updateGif()
         
@@ -154,7 +162,7 @@ game.  Please select a difficulty.'''
         
         if self.debug: print 'updated player at', row, column
         
-        self.board.setBlock(row, column, 'X')
+        self.board.setBlock(row, column, self.player)
         
         self.updateGif()
         return 1
@@ -162,6 +170,11 @@ game.  Please select a difficulty.'''
     def updateGif(self):
         '''update visual board by replacing the button'''
         if self.debug: print self.board.toString(), '\n'
+
+        #on first move, remember the board
+        if self.gameType == 'minimax':
+            if self.board.countX() == 1:
+                self.firstBoard = self.board.toList()
         
         for row in range(3):
             for column in range(3):
@@ -182,6 +195,8 @@ game.  Please select a difficulty.'''
         '''ask user if they wish to play again'''
         import tkMessageBox
         
+
+
         winner = ''
         again = '\nWould you like to play again?'
         if self.board.hasWinner() is 'X':
