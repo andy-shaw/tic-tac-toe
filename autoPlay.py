@@ -37,7 +37,7 @@ def autoPlay(player1, player2, error, silent):
         b.setBlock(row, column, 'O')
         if not silent: print b.toString(), '\n'
         
-        if not silent: sleep(1)
+        # if not silent: sleep(1)
         
         if b.hasWinner() or b.isFull(): continue
         
@@ -54,21 +54,17 @@ def autoPlay(player1, player2, error, silent):
         b.setBlock(row, column, 'X')
         if not silent: print b.toString(), '\n'
         
-        if not silent: sleep(1)
-
-    if not silent:
-        if b.hasWinner() is 'X': print 'X won this round'
-        elif b.hasWinner() is 'O': print 'O won this round'
-        elif b.isFull(): print 'There was no winner this round'
+        # if not silent: sleep(1)
         
     return b.hasWinner()
         
 if __name__ == '__main__':
     import sys
+    import string
     args = sys.argv[1:]
     
-    player1 = args[0]
-    player2 = args[1]
+    player1 = string.upper(args[0])
+    player2 = string.upper(args[1])
 
     difficulties = ['E', 'M', 'H']
     
@@ -84,10 +80,13 @@ if __name__ == '__main__':
         exit()
         
     try:
-        tmp = args[3]
+        tmp = string.upper(args[3])
         if tmp == 'SILENT': silent = True
         else: raise Exception
     except:
         silent = False
         
     winner = autoPlay(player1, player2, errorRate, silent)
+    
+    if winner is 'X' or winner is 'O': print winner, 'won this round'
+    else: print 'There was no winner this round'
