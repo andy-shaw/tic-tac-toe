@@ -40,15 +40,10 @@ def difficult(board, difficulty, computer='O'):
     root = Node(board)
     bestMove = minimax(root, movesAhead[difficulty], True, computer)
 
-    print '\n\n', bestMove
-
     nextBoard = None
     
     #choose board that matches best move 
     for child in root.children:
-        # print 'child:\t\n', child.board.toString()
-        # print 'score:\t', child.score
-        # print '-----------'
         if child.score == bestMove:
             nextBoard = child.board
 
